@@ -6,36 +6,33 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-  
+
 permissions: write-all
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
-      # Set up Python 3.11 explicitly
-      - name: Set up Python 3.11
+      - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12'
           
-      - uses: iterative/setup-cml@v2
-      
-      - name: Install Packages
-        run: make install
-        
-      - name: Install black
-        run: pip install black   
-        
-      - name: Format
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install black  # Explicitly install formatter
+          
+      - name: Format code
         run: make format
         
-      - name: Train
+      - name: Train model
         run: make train
         
-      - name: Evaluation
+      - name: Evaluate
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: make eval
