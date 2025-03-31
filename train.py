@@ -48,10 +48,6 @@ def main():
     disp.plot()
     plt.savefig("Results/mode_results.png", dpi=120)
     
-    # Save artifacts
-    os.makedirs("Model", exist_ok=True)
-    os.makedirs("Results", exist_ok=True)
-    
     # joblib.dump(model, "Model/drug_model.pkl")
     print("Training complete!")
     sio.dump(pipeline, "Model/drug_pipeline.skops")
