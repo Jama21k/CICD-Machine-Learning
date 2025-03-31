@@ -1,4 +1,5 @@
 name: Continuous Integration
+
 on:
   push:
     branches: [ "main" ]
@@ -7,18 +8,30 @@ on:
   workflow_dispatch:
   
 permissions: write-all
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      # Set up Python 3.11 explicitly
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
       - uses: iterative/setup-cml@v2
+      
       - name: Install Packages
         run: make install
+        
       - name: Format
         run: make format
+        
       - name: Train
         run: make train
+        
       - name: Evaluation
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
